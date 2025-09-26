@@ -3,7 +3,7 @@ import sqlite3
 #Criar a conexão com o bancp de dados chamado de "escola.db"
 conexao = sqlite3.connect("escola.db")
 #Criar o objeto chamado de "cursor"que sera usadp ára executar os comandos sql
-cursor = conexao.cursor()
+# cursor = conexao.cursor()
 
 #Criar uma tabela no banco
 # cursor.execute("""
@@ -78,7 +78,30 @@ cursor = conexao.cursor()
 #     print(f" NOME:{linha [0]} |IDADE:{linha [1]}  |CURSO:{linha [2]}")
 
 # Deletar dados do banco
-cursor.execute("DELETE FROM alunos WHERE id = ?" , (1,))
-conexao.commit()
+# cursor.execute("DELETE FROM alunos WHERE id = ?" , (1,))
+# conexao.commit()
 #sempre fechar a conexãp com o banco de dados, se não o pc explode
-conexao.close()
+# conexao.close()
+
+def deletar_aluno(id_aluno):
+    try:
+        conexao = sqlite3.connect("escola.db")
+        cursor = conexao.cursor()
+
+        cursor.execute("DELETE FROM alunos WHERE id = ?", (id_aluno,))
+        #Confirmando as alterações no banco
+        conexao.commit()
+        # Verificando se algum aluno foi realmente deletado
+        if cursor.rowcount > 0:
+            print("Aluno foi removido com sucesso")
+        else:
+            print("Nenhum aluno encontrado com o ID fornecido.")
+    except Exception as erro:
+        #Caso ocorra algum erro no banco
+        print(f"erro ao tentar excluir aluno {erro}")
+    finally:
+        #Sempre fechar a conexão
+        if conexao:
+            conexao.close()
+deletar = int(input("Digite o id do aluno que deseja deletar: "))
+deletar_aluno(deletar)
